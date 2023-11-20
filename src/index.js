@@ -28,10 +28,17 @@ const getConversionFrom = async () => {
 
         else {
             console.error("Error in getConversion:", response);
+            console.log(response.status);
 
-            errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
-            errorContainer.innerText = "";
-            errorContainer.append(errorMessage);
+            if (response.status === 404) {
+                errorMessage.innerText = `${response}. Invalid currency code. Please select from the list provided.`;
+                errorContainer.innerText = "";
+                errorContainer.append(errorMessage);
+            } else {
+                errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
+                errorContainer.innerText = "";
+                errorContainer.append(errorMessage);
+            }
         }
     }
 };
