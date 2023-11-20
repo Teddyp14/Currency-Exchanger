@@ -5,7 +5,7 @@ export default class ConvertCurrency {
             const response = await fetch(`https://v6.exchangerate-api.com/v6/${process.env.API_KEY}/latest/${currency}`);
             const responseData = await response.json();
             if (!response.ok) {
-                const errorMessage = `Error: ${responseData["error-type"]}`;
+                const errorMessage = responseData["error-type"];
                 console.log(errorMessage);
                 throw new Error(errorMessage);
             }

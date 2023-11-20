@@ -3,56 +3,53 @@ import 'bootstrap';
 import './css/styles.css';
 import ConvertCurrency from './js/convert-currency';
 
-const getConversion = async () => {
-    try {
-        const fromCurrency = document.getElementById("from-currency").value;
-        const fromAmount = document.getElementById("from-amount").value;
-        const toCurrency = document.getElementById("to-currency").value;
-        const toAmount = document.getElementById("to-amount");
+const getConversionFrom = async () => {
 
-        const conversionResponse = await ConvertCurrency.getConversion(fromCurrency);
+    const fromCurrency = document.getElementById("from-currency").value;
+    const fromAmount = document.getElementById("from-amount").value;
+    const toCurrency = document.getElementById("to-currency").value;
+    const toAmount = document.getElementById("to-amount");
 
-        const conversionRate = conversionResponse.conversion_rates[toCurrency];
+    const response = await ConvertCurrency.getConversion(fromCurrency);
+
+    if (response.conversion_rates) {
+        const conversionRate = response.conversion_rates[toCurrency];
         toAmount.value = (fromAmount * conversionRate);
+    }
 
-    } catch (error) {
-        console.error("Error in getConversion:", error.message);
+    else {
+        console.error("Error in getConversion:", response);
         const errorContainer = document.getElementById("error-container");
         const errorMessage = document.createElement("h3");
-        errorMessage.textContent = "An error occurred: " + error.message;
-        errorContainer.innerHTML = "";
+        errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
+        errorContainer.innerText = "";
         errorContainer.append(errorMessage);
     }
 };
 
+const getConversionTo = async () => {
 
+    const fromCurrency = document.getElementById("from-currency").value;
+    const fromAmount = document.getElementById("from-amount");
+    const toCurrency = document.getElementById("to-currency").value;
+    const toAmount = document.getElementById("to-amount").value;
 
+    const response = await ConvertCurrency.getConversion(toCurrency);
 
+    if (response.conversion_rates) {
+        const conversionRate = response.conversion_rates[fromCurrency];
+        fromAmount.value = (toAmount * conversionRate);
+    }
 
+    else {
+        console.error("Error in getConversion:", response);
+        const errorContainer = document.getElementById("error-container");
+        const errorMessage = document.createElement("h3");
+        errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
+        errorContainer.innerText = "";
+        errorContainer.append(errorMessage);
+    }
+};
 
-// const getConversion = async () => {
-//     const fromCurrency = document.getElementById("from-currency").value;
-//     const fromAmount = document.getElementById("from-amount").value;
-//     const toCurrency = document.getElementById("to-currency").value;
-//     const toAmount = document.getElementById("to-amount");
-
-//     try {
-//         const conversionResponse = await ConvertCurrency.getConversion(fromCurrency);
-
-//         if (conversionResponse.conversion_rates) {
-//             const conversionRate = conversionResponse.conversion_rates[toCurrency];
-//             toAmount.value = (fromAmount * conversionRate);
-//         } else {
-//             throw new Error("Failed to retrieve conversion rates.");
-//         }
-//     }
-//     catch (error) {
-//         const errorcontainer = document.getElementById("error-container");
-//         const errorMessage = document.createElement("h3");
-//         errorMessage.innerText = `An error occurred: ${error.message}`;
-//         errorcontainer.append(errorMessage);
-//     }
-
-// }
-
-document.getElementById("from-amount").addEventListener("input", getConversion);
+document.getElementById("from-amount").addEventListener("input", getConversionFrom);
+document.getElementById("to-amount").addEventListener("input", getConversionTo);
