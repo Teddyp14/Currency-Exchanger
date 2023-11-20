@@ -16,36 +16,36 @@ const handleError = (response, errorMessage, errorContainer) => {
 }
 
 const getVariables = () => {
-    const fromCurrency = document.getElementById("from-currency").value;
-    const toCurrency = document.getElementById("to-currency").value;
+    const currencyOne = (document.getElementById("currency-one").value).toUpperCase();
+    const currencyTwo = (document.getElementById("currency-two").value).toUpperCase();
     const errorContainer = document.getElementById("error-container");
     const errorMessage = document.createElement("h3");
 
-    return { fromCurrency, toCurrency, errorContainer, errorMessage };
+    return { currencyOne, currencyTwo, errorContainer, errorMessage };
 }
 
 const getConversionFrom = async () => {
     const vars = getVariables();
-    const fromAmount = document.getElementById("from-amount").value;
-    const toAmount = document.getElementById("to-amount");
+    const amountOne = document.getElementById("amount-one").value;
+    const amountTwo = document.getElementById("amount-two");
 
     vars.errorContainer.innerText = "";
 
-    if (!vars.fromCurrency || !vars.toCurrency) {
+    if (!vars.currencyOne || !vars.currencyTwo) {
         vars.errorMessage.innerText = "Please enter two currencies to exchange between.";
         vars.errorContainer.append(vars.errorMessage);
 
     } else {
 
-        const response = await ConvertCurrency.getConversion(vars.fromCurrency);
+        const response = await ConvertCurrency.getConversion(vars.currencyOne);
 
         if (response.conversion_rates) {
-            const conversionRate = response.conversion_rates[vars.toCurrency];
+            const conversionRate = response.conversion_rates[vars.currencyTwo];
             if (isNaN(conversionRate)) {
                 vars.errorMessage.innerText = "Please enter a valid currency to convert between.";
                 vars.errorContainer.append(vars.errorMessage);
             } else {
-                toAmount.value = (fromAmount * conversionRate);
+                amountTwo.value = (amountOne * conversionRate);
             }
         }
 
@@ -57,24 +57,24 @@ const getConversionFrom = async () => {
 
 const getConversionTo = async () => {
     const vars = getVariables();
-    const fromAmount = document.getElementById("from-amount");
-    const toAmount = document.getElementById("to-amount").value;
+    const amountOne = document.getElementById("amount-one");
+    const amountTwo = document.getElementById("amount-two").value;
 
     vars.errorContainer.innerText = "";
 
-    if (!vars.fromCurrency || !vars.toCurrency) {
+    if (!vars.currencyOne || !vars.currencyTwo) {
         vars.errorMessage.innerText = "Please enter to currencies to exchange between.";
         vars.errorContainer.append(vars.errorMessage);
     } else {
-        const response = await ConvertCurrency.getConversion(vars.toCurrency);
+        const response = await ConvertCurrency.getConversion(vars.currencyTwo);
 
         if (response.conversion_rates) {
-            const conversionRate = response.conversion_rates[vars.fromCurrency];
+            const conversionRate = response.conversion_rates[vars.currencyOne];
             if (isNaN(conversionRate)) {
                 vars.errorMessage.innerText = "Please enter a valid currency to convert between.";
                 vars.errorContainer.append(vars.errorMessage);
             } else {
-                fromAmount.value = (toAmount * conversionRate);
+                amountOne.value = (amountTwo * conversionRate);
             }
         }
 
@@ -84,7 +84,22 @@ const getConversionTo = async () => {
     }
 };
 
-document.getElementById("from-amount").addEventListener("input", getConversionFrom);
-// document.getElementById("from-currency").addEventListener("input", getConversionFrom)
-document.getElementById("to-amount").addEventListener("input", getConversionTo);
-// document.getElementById("to-currency").addEventListener("input", getConversionTo)
+const showCurrencies = async () => {
+    const currencies = document.getElementById("currencies");
+    const currencyList = document.getElementById("currency-list")
+    const response = await ConvertCurrency.getConversion("USD");
+
+    Object.keys(response.conversion_rates).forEach((key) => {
+        const currency = document.createElement("li");
+        currency.append(key);
+        currencyList.append(currency);
+    })
+
+    currencies.append(currencyList);
+    // document.getElementById("get-currency").setAttribute("class", "hidden");
+
+}
+
+document.getElementById("amount-one").addEventListener("input", getConversionFrom);
+document.getElementById("amount-two").addEventListener("input", getConversionTo);
+document.getElementById("get-currency").addEventListener("click", showCurrencies)

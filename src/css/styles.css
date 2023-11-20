@@ -1,0 +1,7 @@
+.hidden {
+    display: none;
+}
+
+#currency-list {
+    max-height: 500px;
+}

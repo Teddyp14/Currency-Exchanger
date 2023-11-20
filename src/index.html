@@ -13,15 +13,26 @@
 
     <form>
         <p>From: </p>
-        <input type="number" id="from-amount">
-        <input type="text" id="from-currency" placeholder="Enter a currency code">
+        <input type="number" id="amount-one">
+        <input type="text" id="currency-one" placeholder="Enter currency code e.g. USD">
 
         <p>To:</p>
-        <input type="number" id="to-amount">
-        <input type="text" id="to-currency" placeholder="Enter a currency code">
+        <input type="number" id="amount-two">
+        <input type="text" id="currency-two" placeholder="Enter currency code e.g. MXN">
     </form>
 
     <div id="error-container"></div>
+    <!-- <div id="currencies">
+        <button id="get-currency">View currency codes</button>
+    </div> -->
+
+    <div class="dropdown" id="currencies">
+        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="get-currency">
+            View currency codes
+        </button>
+        <ul class="dropdown-menu overflow-auto" id="currency-list">
+        </ul>
+    </div>
 
 </body>
 
