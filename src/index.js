@@ -12,6 +12,8 @@ const getConversionFrom = async () => {
     const errorContainer = document.getElementById("error-container");
     const errorMessage = document.createElement("h3");
 
+    errorContainer.innerText = "";
+
     if (!fromCurrency || !toCurrency) {
         errorMessage.innerText = "Please enter to currencies to exchange between.";
         errorContainer.innerText = "";
@@ -27,16 +29,13 @@ const getConversionFrom = async () => {
         }
 
         else {
-            console.error("Error in getConversion:", response);
-            console.log(response.status);
+            console.error("Error in getConversionFrom:", response);
 
-            if (response.status === 404) {
+            if (response.message.includes("404")) {
                 errorMessage.innerText = `${response}. Invalid currency code. Please select from the list provided.`;
-                errorContainer.innerText = "";
                 errorContainer.append(errorMessage);
             } else {
                 errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
-                errorContainer.innerText = "";
                 errorContainer.append(errorMessage);
             }
         }
@@ -52,6 +51,8 @@ const getConversionTo = async () => {
     const errorContainer = document.getElementById("error-container");
     const errorMessage = document.createElement("h3");
 
+    errorContainer.innerText = "";
+
     if (!fromCurrency || !toCurrency) {
         errorMessage.innerText = "Please enter to currencies to exchange between.";
         errorContainer.innerText = "";
@@ -65,10 +66,15 @@ const getConversionTo = async () => {
         }
 
         else {
-            console.error("Error in getConversion:", response);
-            errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
-            errorContainer.innerText = "";
-            errorContainer.append(errorMessage);
+            console.error("Error in getConversionTo:", response);
+
+            if (response.message.includes("404")) {
+                errorMessage.innerText = `${response}. Invalid currency code. Please select from the list provided.`;
+                errorContainer.append(errorMessage);
+            } else {
+                errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
+                errorContainer.append(errorMessage);
+            }
         }
     }
 };
