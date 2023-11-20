@@ -4,41 +4,55 @@ import './css/styles.css';
 import ConvertCurrency from './js/convert-currency';
 
 const getConversion = async () => {
-    const fromCurrency = document.getElementById("from-currency").value;
-    const fromAmount = document.getElementById("from-amount").value;
-    const toCurrency = document.getElementById("to-currency").value;
-    const toAmount = document.getElementById("to-amount");
+    try {
+        const fromCurrency = document.getElementById("from-currency").value;
+        const fromAmount = document.getElementById("from-amount").value;
+        const toCurrency = document.getElementById("to-currency").value;
+        const toAmount = document.getElementById("to-amount");
 
-    const conversionResponse = await ConvertCurrency.getConversion(fromCurrency);
+        const conversionResponse = await ConvertCurrency.getConversion(fromCurrency);
 
-    if (conversionResponse.conversion_rates) {
         const conversionRate = conversionResponse.conversion_rates[toCurrency];
         toAmount.value = (fromAmount * conversionRate);
-    } else {
-        console.log("reached the error")
-        const errorcontainer = document.getElementById("error-container");
+
+    } catch (error) {
+        console.error("Error in getConversion:", error.message);
+        const errorContainer = document.getElementById("error-container");
         const errorMessage = document.createElement("h3");
-        errorMessage.append(conversionResponse);
-        errorcontainer.append(errorMessage);
+        errorMessage.textContent = "An error occurred: " + error.message;
+        errorContainer.innerHTML = "";
+        errorContainer.append(errorMessage);
     }
-
-    // try {
-    //     const conversionResponse = await ConvertCurrency.getConversion(fromCurrency);
-
-    //     if (!conversionResponse || conversionResponse.result !== "success") {
-    //         throw new Error(`Error type: ${conversionResponse[3]}. Failed to retrieve conversion rates.`);
-    //     } else {
-    //         const conversionRate = conversionResponse.conversion_rates[toCurrency];
-
-    //         toAmount.value = (fromAmount * conversionRate);
-    //     }
-    // } catch (error) {
-    //     const errorcontainer = document.getElementById("error-container");
-    //     const errorMessage = document.createElement("h3");
-    //     errorMessage.append(error.message);
-    //     errorcontainer.append(errorMessage);
-    // }
-
 };
+
+
+
+
+
+
+// const getConversion = async () => {
+//     const fromCurrency = document.getElementById("from-currency").value;
+//     const fromAmount = document.getElementById("from-amount").value;
+//     const toCurrency = document.getElementById("to-currency").value;
+//     const toAmount = document.getElementById("to-amount");
+
+//     try {
+//         const conversionResponse = await ConvertCurrency.getConversion(fromCurrency);
+
+//         if (conversionResponse.conversion_rates) {
+//             const conversionRate = conversionResponse.conversion_rates[toCurrency];
+//             toAmount.value = (fromAmount * conversionRate);
+//         } else {
+//             throw new Error("Failed to retrieve conversion rates.");
+//         }
+//     }
+//     catch (error) {
+//         const errorcontainer = document.getElementById("error-container");
+//         const errorMessage = document.createElement("h3");
+//         errorMessage.innerText = `An error occurred: ${error.message}`;
+//         errorcontainer.append(errorMessage);
+//     }
+
+// }
 
 document.getElementById("from-amount").addEventListener("input", getConversion);
