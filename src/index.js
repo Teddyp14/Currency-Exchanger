@@ -15,61 +15,71 @@ const handleError = (response, errorMessage, errorContainer) => {
     }
 }
 
-const getConversionFrom = async () => {
-
+const getVariables = () => {
     const fromCurrency = document.getElementById("from-currency").value;
-    const fromAmount = document.getElementById("from-amount").value;
     const toCurrency = document.getElementById("to-currency").value;
-    const toAmount = document.getElementById("to-amount");
     const errorContainer = document.getElementById("error-container");
     const errorMessage = document.createElement("h3");
 
-    errorContainer.innerText = "";
+    return { fromCurrency, toCurrency, errorContainer, errorMessage };
+}
 
-    if (!fromCurrency || !toCurrency) {
-        errorMessage.innerText = "Please enter two currencies to exchange between.";
-        errorContainer.append(errorMessage);
+const getConversionFrom = async () => {
+    const vars = getVariables();
+    const fromAmount = document.getElementById("from-amount").value;
+    const toAmount = document.getElementById("to-amount");
+
+    vars.errorContainer.innerText = "";
+
+    if (!vars.fromCurrency || !vars.toCurrency) {
+        vars.errorMessage.innerText = "Please enter two currencies to exchange between.";
+        vars.errorContainer.append(vars.errorMessage);
 
     } else {
 
-        const response = await ConvertCurrency.getConversion(fromCurrency);
+        const response = await ConvertCurrency.getConversion(vars.fromCurrency);
 
         if (response.conversion_rates) {
-            const conversionRate = response.conversion_rates[toCurrency];
-            toAmount.value = (fromAmount * conversionRate);
+            const conversionRate = response.conversion_rates[vars.toCurrency];
+            if (isNaN(conversionRate)) {
+                vars.errorMessage.innerText = "Please enter a valid currency to convert between.";
+                vars.errorContainer.append(vars.errorMessage);
+            } else {
+                toAmount.value = (fromAmount * conversionRate);
+            }
         }
 
         else {
-            handleError(response, errorMessage, errorContainer)
+            handleError(response, vars.errorMessage, vars.errorContainer)
         }
     }
 };
 
 const getConversionTo = async () => {
-
-    const fromCurrency = document.getElementById("from-currency").value;
+    const vars = getVariables();
     const fromAmount = document.getElementById("from-amount");
-    const toCurrency = document.getElementById("to-currency").value;
     const toAmount = document.getElementById("to-amount").value;
-    const errorContainer = document.getElementById("error-container");
-    const errorMessage = document.createElement("h3");
 
-    errorContainer.innerText = "";
+    vars.errorContainer.innerText = "";
 
-    if (!fromCurrency || !toCurrency) {
-        errorMessage.innerText = "Please enter to currencies to exchange between.";
-        errorContainer.innerText = "";
-        errorContainer.append(errorMessage);
+    if (!vars.fromCurrency || !vars.toCurrency) {
+        vars.errorMessage.innerText = "Please enter to currencies to exchange between.";
+        vars.errorContainer.append(vars.errorMessage);
     } else {
-        const response = await ConvertCurrency.getConversion(toCurrency);
+        const response = await ConvertCurrency.getConversion(vars.toCurrency);
 
         if (response.conversion_rates) {
-            const conversionRate = response.conversion_rates[fromCurrency];
-            fromAmount.value = (toAmount * conversionRate);
+            const conversionRate = response.conversion_rates[vars.fromCurrency];
+            if (isNaN(conversionRate)) {
+                vars.errorMessage.innerText = "Please enter a valid currency to convert between.";
+                vars.errorContainer.append(vars.errorMessage);
+            } else {
+                fromAmount.value = (toAmount * conversionRate);
+            }
         }
 
         else {
-            handleError(response, errorMessage, errorContainer)
+            handleError(response, vars.errorMessage, vars.errorContainer)
         }
     }
 };
