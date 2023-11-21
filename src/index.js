@@ -67,6 +67,7 @@ const getConversionTwo = async () => {
     const amountTwo = document.getElementById("amount-two").value;
 
     vars.errorContainer.innerText = "";
+    vars.rateContainer.innerText = "";
 
     if (!vars.currencyOne || !vars.currencyTwo) {
         printError(vars.errorMessage, vars.errorContainer)
