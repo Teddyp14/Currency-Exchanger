@@ -4,18 +4,6 @@ import './css/styles.css';
 import ConvertCurrency from './js/convert-currency';
 import GetCurrencies from './js/get-currencies';
 
-const handleError = (response, errorMessage, errorContainer) => {
-    console.error("Error: ", response);
-
-    if (response.message.includes("404")) {
-        errorMessage.innerText = `${response}. Invalid currency code. Please select from the list provided.`;
-        errorContainer.append(errorMessage);
-    } else {
-        errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
-        errorContainer.append(errorMessage);
-    }
-};
-
 const getVariables = () => {
     const currencyOne = (document.getElementById("currency-one").value).toUpperCase();
     const currencyTwo = (document.getElementById("currency-two").value).toUpperCase();
@@ -27,26 +15,42 @@ const getVariables = () => {
     return { currencyOne, currencyTwo, rateContainer, rate, errorContainer, errorMessage };
 };
 
-const printError = (errorMessage, errorContainer) => {
+const handleError = (response, errorMessage, errorContainer, rateContainer) => {
+    console.error("Error: ", response);
+    errorContainer.innerText = "";
+    rateContainer.innerText = "";
+
+    if (response.message.includes("404")) {
+        errorMessage.innerText = `${response}. Invalid currency code. Please select from the list provided.`;
+        errorContainer.append(errorMessage);
+    } else {
+        errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
+        errorContainer.append(errorMessage);
+    }
+};
+
+const printError = (rateContainer, errorMessage, errorContainer) => {
+    rateContainer.innerText = "";
+    errorContainer.innerText = "";
     errorMessage.innerText = "Please enter two currencies to exchange between.";
     errorContainer.append(errorMessage);
-}
+};
 
-const printRate = (rate, rateContainer, conversionRate, currencyOne, currencyTwo) => {
+const printRate = (errorContainer, rate, rateContainer, conversionRate, currencyOne, currencyTwo) => {
+    errorContainer.innerText = "";
+    rateContainer.innerText = "";
     rate.innerText = `1 ${currencyOne} equals ${conversionRate} ${currencyTwo}`;
     rateContainer.append(rate);
-}
+
+};
 
 const getConversionOne = async () => {
     const vars = getVariables();
     const amountOne = document.getElementById("amount-one").value;
     const amountTwo = document.getElementById("amount-two");
 
-    vars.errorContainer.innerText = "";
-    vars.rateContainer.innerText = "";
-
     if (!vars.currencyOne || !vars.currencyTwo) {
-        printError(vars.errorMessage, vars.errorContainer)
+        printError(vars.rateContainer, vars.errorMessage, vars.errorContainer);
 
     } else {
         const response = await ConvertCurrency.getConversion(vars.currencyOne, vars.currencyTwo);
@@ -54,9 +58,9 @@ const getConversionOne = async () => {
         if (response.conversion_rate) {
             const conversionRate = response.conversion_rate;
             amountTwo.value = (amountOne * conversionRate);
-            printRate(vars.rate, vars.rateContainer, conversionRate, vars.currencyOne, vars.currencyTwo)
+            printRate(vars.errorContainer, vars.rate, vars.rateContainer, conversionRate, vars.currencyOne, vars.currencyTwo);
         } else {
-            handleError(response, vars.errorMessage, vars.errorContainer);
+            handleError(response, vars.errorMessage, vars.errorContainer, vars.rateContainer);
         }
     }
 };
@@ -67,19 +71,18 @@ const getConversionTwo = async () => {
     const amountTwo = document.getElementById("amount-two").value;
 
     vars.errorContainer.innerText = "";
-    vars.rateContainer.innerText = "";
 
     if (!vars.currencyOne || !vars.currencyTwo) {
-        printError(vars.errorMessage, vars.errorContainer)
+        printError(vars.rateContainer, vars.errorMessage, vars.errorContainer);
     } else {
         const response = await ConvertCurrency.getConversion(vars.currencyTwo, vars.currencyOne);
 
         if (response.conversion_rate) {
             const conversionRate = response.conversion_rate;
             amountOne.value = (amountTwo * conversionRate);
-            printRate(vars.rate, vars.rateContainer, conversionRate, vars.currencyTwo, vars.currencyOne)
+            printRate(vars.errorContainer, vars.rate, vars.rateContainer, conversionRate, vars.currencyTwo, vars.currencyOne);
         } else {
-            handleError(response, vars.errorMessage, vars.errorContainer);
+            handleError(response, vars.errorMessage, vars.errorContainer, vars.rateContainer);
         }
     }
 };
@@ -90,7 +93,7 @@ const codeConvertOne = () => {
     if (vars.currencyOne.length === 3) {
         getConversionOne();
     }
-}
+};
 
 const codeConvertTwo = () => {
     const vars = getVariables();
@@ -98,7 +101,7 @@ const codeConvertTwo = () => {
     if (vars.currencyTwo.length === 3) {
         getConversionTwo();
     }
-}
+};
 
 const showCurrencies = async () => {
     const currencies = document.getElementById("currencies");

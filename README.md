@@ -31,7 +31,7 @@ An application that will convert the amount of a selected currency to the equiva
 
 ## Known Bugs
 
-* If the user types in currency amounts faster than the API information is received, the conversion rate displays twice.
+* Unknown at this time.
 
 ## License
 
