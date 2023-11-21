@@ -15,11 +15,18 @@
 
 #main-info {
     float: left;
-    text-align: center;
+    /* text-align: center; */
     margin: 10px;
+    max-width: 40%;
 }
 
-#main-info svg {
+form {
+    text-align: center;
+    width: fit-content;
+}
+
+form svg {
+    display: inline-block;
     margin-bottom: 10px;
 }
 
@@ -36,11 +43,11 @@
 }
 
 .card {
-    margin: 10px;
+    margin: 5%;
 }
 
 #currencies {
-    margin: 10px;
+    margin: 5%;
 }
 
 #currency-list {
