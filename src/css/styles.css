@@ -10,17 +10,33 @@
 }
 
 #content {
-    padding: 5%;
+    padding: 10%;
 }
 
 #main-info {
     width: 60%;
+    float: left;
 }
 
-#currencies {
-    float: right;
-    display: flexbox;
+#first-entries {
+    display: flex;
 }
+
+#second-entries {
+    display: flex;
+}
+
+#currency-codes {
+    display: flex;
+}
+
+/* #currencies {
+    display: flex;
+}
+
+#major-currencyies {
+    display: flex;
+} */
 
 #currency-list {
     max-height: 500px;
