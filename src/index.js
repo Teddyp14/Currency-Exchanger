@@ -37,19 +37,12 @@ const getConversionFrom = async () => {
 
     } else {
 
-        const response = await ConvertCurrency.getConversion(vars.currencyOne);
+        const response = await ConvertCurrency.getConversion(vars.currencyOne, vars.currencyTwo);
 
-        if (response.conversion_rates) {
-            const conversionRate = response.conversion_rates[vars.currencyTwo];
-            if (isNaN(conversionRate)) {
-                vars.errorMessage.innerText = "Please enter a valid currency to convert between.";
-                vars.errorContainer.append(vars.errorMessage);
-            } else {
-                amountTwo.value = (amountOne * conversionRate);
-            }
-        }
-
-        else {
+        if (response.conversion_rate) {
+            const conversionRate = response.conversion_rate;
+            amountTwo.value = (amountOne * conversionRate);
+        } else {
             handleError(response, vars.errorMessage, vars.errorContainer);
         }
     }
@@ -66,19 +59,13 @@ const getConversionTo = async () => {
         vars.errorMessage.innerText = "Please enter to currencies to exchange between.";
         vars.errorContainer.append(vars.errorMessage);
     } else {
-        const response = await ConvertCurrency.getConversion(vars.currencyTwo);
+        const response = await ConvertCurrency.getConversion(vars.currencyTwo, vars.currencyOne);
 
-        if (response.conversion_rates) {
-            const conversionRate = response.conversion_rates[vars.currencyOne];
-            if (isNaN(conversionRate)) {
-                vars.errorMessage.innerText = "Please enter a valid currency to convert between.";
-                vars.errorContainer.append(vars.errorMessage);
-            } else {
-                amountOne.value = (amountTwo * conversionRate);
-            }
-        }
+        if (response.conversion_rate) {
+            const conversionRate = response.conversion_rate;
+            amountOne.value = (amountTwo * conversionRate);
 
-        else {
+        } else {
             handleError(response, vars.errorMessage, vars.errorContainer);
         }
     }
@@ -96,10 +83,11 @@ const showCurrencies = async () => {
     });
 
     currencies.append(currencyList);
-    // document.getElementById("get-currency").setAttribute("class", "hidden");
-
 };
 
 document.getElementById("amount-one").addEventListener("input", getConversionFrom);
 document.getElementById("amount-two").addEventListener("input", getConversionTo);
 document.getElementById("get-currency").addEventListener("click", showCurrencies);
+
+
+//Need to switch the API to the pair conversion option to get better error handling. Use the standard API to get the list of all currency codes.
