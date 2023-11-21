@@ -1,5 +1,25 @@
-.hidden {
-    display: none;
+#header {
+    background-image: url(../assets/images/header.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 500px;
+    font-size: 100px;
+    color: white;
+    padding: 5%;
+}
+
+#content {
+    padding: 5%;
+}
+
+#main-info {
+    width: 60%;
+}
+
+#currencies {
+    float: right;
+    display: flexbox;
 }
 
 #currency-list {

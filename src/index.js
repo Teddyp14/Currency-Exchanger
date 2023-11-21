@@ -13,7 +13,7 @@ const handleError = (response, errorMessage, errorContainer) => {
         errorMessage.innerText = `${response}. We are unable to retrieve conversion rates.`;
         errorContainer.append(errorMessage);
     }
-}
+};
 
 const getVariables = () => {
     const currencyOne = (document.getElementById("currency-one").value).toUpperCase();
@@ -22,7 +22,7 @@ const getVariables = () => {
     const errorMessage = document.createElement("h3");
 
     return { currencyOne, currencyTwo, errorContainer, errorMessage };
-}
+};
 
 const getConversionFrom = async () => {
     const vars = getVariables();
@@ -50,7 +50,7 @@ const getConversionFrom = async () => {
         }
 
         else {
-            handleError(response, vars.errorMessage, vars.errorContainer)
+            handleError(response, vars.errorMessage, vars.errorContainer);
         }
     }
 };
@@ -79,27 +79,27 @@ const getConversionTo = async () => {
         }
 
         else {
-            handleError(response, vars.errorMessage, vars.errorContainer)
+            handleError(response, vars.errorMessage, vars.errorContainer);
         }
     }
 };
 
 const showCurrencies = async () => {
     const currencies = document.getElementById("currencies");
-    const currencyList = document.getElementById("currency-list")
+    const currencyList = document.getElementById("currency-list");
     const response = await ConvertCurrency.getConversion("USD");
 
     Object.keys(response.conversion_rates).forEach((key) => {
         const currency = document.createElement("li");
         currency.append(key);
         currencyList.append(currency);
-    })
+    });
 
     currencies.append(currencyList);
     // document.getElementById("get-currency").setAttribute("class", "hidden");
 
-}
+};
 
 document.getElementById("amount-one").addEventListener("input", getConversionFrom);
 document.getElementById("amount-two").addEventListener("input", getConversionTo);
-document.getElementById("get-currency").addEventListener("click", showCurrencies)
+document.getElementById("get-currency").addEventListener("click", showCurrencies);
