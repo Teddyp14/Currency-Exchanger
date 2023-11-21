@@ -14,8 +14,13 @@
 }
 
 #main-info {
-    width: 60%;
     float: left;
+    text-align: center;
+    margin: 10px;
+}
+
+#main-info svg {
+    margin-bottom: 10px;
 }
 
 #first-entries {
@@ -30,13 +35,13 @@
     display: flex;
 }
 
-/* #currencies {
-    display: flex;
+.card {
+    margin: 10px;
 }
 
-#major-currencyies {
-    display: flex;
-} */
+#currencies {
+    margin: 10px;
+}
 
 #currency-list {
     max-height: 500px;
