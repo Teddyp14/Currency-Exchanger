@@ -19,15 +19,22 @@ const handleError = (response, errorMessage, errorContainer) => {
 const getVariables = () => {
     const currencyOne = (document.getElementById("currency-one").value).toUpperCase();
     const currencyTwo = (document.getElementById("currency-two").value).toUpperCase();
+    const rateContainer = document.getElementById("conversion-rate");
+    const rate = document.createElement("h3");
     const errorContainer = document.getElementById("error-container");
     const errorMessage = document.createElement("h3");
 
-    return { currencyOne, currencyTwo, errorContainer, errorMessage };
+    return { currencyOne, currencyTwo, rateContainer, rate, errorContainer, errorMessage };
 };
 
 const printError = (errorMessage, errorContainer) => {
     errorMessage.innerText = "Please enter two currencies to exchange between.";
     errorContainer.append(errorMessage);
+}
+
+const printRate = (rate, rateContainer, conversionRate, currencyOne, currencyTwo) => {
+    rate.innerText = `1 ${currencyOne} equals ${conversionRate} ${currencyTwo}`;
+    rateContainer.append(rate);
 }
 
 const getConversionOne = async () => {
@@ -36,17 +43,18 @@ const getConversionOne = async () => {
     const amountTwo = document.getElementById("amount-two");
 
     vars.errorContainer.innerText = "";
+    vars.rateContainer.innerText = "";
 
     if (!vars.currencyOne || !vars.currencyTwo) {
         printError(vars.errorMessage, vars.errorContainer)
 
     } else {
-
         const response = await ConvertCurrency.getConversion(vars.currencyOne, vars.currencyTwo);
 
         if (response.conversion_rate) {
             const conversionRate = response.conversion_rate;
             amountTwo.value = (amountOne * conversionRate);
+            printRate(vars.rate, vars.rateContainer, conversionRate, vars.currencyOne, vars.currencyTwo)
         } else {
             handleError(response, vars.errorMessage, vars.errorContainer);
         }
@@ -68,7 +76,7 @@ const getConversionTwo = async () => {
         if (response.conversion_rate) {
             const conversionRate = response.conversion_rate;
             amountOne.value = (amountTwo * conversionRate);
-
+            printRate(vars.rate, vars.rateContainer, conversionRate, vars.currencyTwo, vars.currencyOne)
         } else {
             handleError(response, vars.errorMessage, vars.errorContainer);
         }
