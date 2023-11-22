@@ -42,7 +42,7 @@ form svg {
 }
 
 .card {
-    margin: 5%;
+    margin: 7%;
 }
 
 #currencies {
@@ -53,8 +53,38 @@ form svg {
     max-height: 500px;
 }
 
-#currencies-columns {
+#currencies-column {
     display: flex;
     flex-direction: column;
     max-width: 30%;
+    margin: 5%;
+}
+
+#code-error {
+    padding: 5%;
+}
+
+@media (max-width: 700px) {
+    #main-info {
+        max-width: 100%;
+    }
+
+    #currency-codes,
+    #conversion-rate,
+    #error-container {
+        width: 100%;
+        max-width: none;
+    }
+
+    #main-info,
+    #currency-codes,
+    #conversion-rate,
+    #error-container {
+        order: 1;
+    }
+
+    #form {
+        width: 100%;
+        max-width: none;
+    }
 }
