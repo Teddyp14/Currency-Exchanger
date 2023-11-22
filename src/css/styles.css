@@ -52,3 +52,9 @@ form svg {
 #currency-list {
     max-height: 500px;
 }
+
+#currencies-columns {
+    display: flex;
+    flex-direction: column;
+    max-width: 30%;
+}

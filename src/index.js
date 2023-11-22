@@ -107,15 +107,22 @@ const showCurrencies = async () => {
     const currencies = document.getElementById("currencies");
     const currencyList = document.getElementById("currency-list");
     const response = await GetCurrencies.getCurrencies();
+    const codeError = document.getElementById("code-error");
+    const errorMessage = document.createElement("h3");
 
+    codeError.innerText = "";
 
-    Object.keys(response.conversion_rates).forEach((key) => {
-        const currency = document.createElement("li");
-        currency.append(key);
-        currencyList.append(currency);
-    });
-
-    currencies.append(currencyList);
+    if (response.conversion_rates) {
+        Object.keys(response.conversion_rates).forEach((key) => {
+            const currency = document.createElement("li");
+            currency.append(key);
+            currencyList.append(currency);
+        });
+        currencies.append(currencyList);
+    } else {
+        errorMessage.innerText = `${response}. Unable to retrieve currency codes.`;
+        codeError.append(errorMessage);
+    }
 };
 
 document.getElementById("amount-one").addEventListener("input", getConversionOne);
