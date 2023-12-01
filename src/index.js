@@ -15,7 +15,6 @@ const getVariables = () => {
 };
 
 const handleError = (response, errorMessage, infoDisplay) => {
-    console.error("Error: ", response);
     infoDisplay.innerText = "";
 
     if (response.message.includes("404")) {

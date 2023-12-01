@@ -6,7 +6,6 @@ export default class GetCurrencies {
             const responseData = await response.json();
             if (!response.ok) {
                 const errorMessage = `${response.status} ${response.statusText} ${responseData["error-type"]}`;
-                console.log(errorMessage);
                 throw new Error(errorMessage);
             }
             return responseData;
