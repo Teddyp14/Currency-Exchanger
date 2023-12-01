@@ -21,8 +21,11 @@ An application that will convert the amount of a selected currency to the equiva
 
 ## Setup/Installation Requirements
 
+* Obtain a personal API key from [ExchangeRate-API](https://www.exchangerate-api.com/)
 * Clone this repository to your desktop.
 * Navigate to the top level directory of the project.
+* Create a ".env" file in the root folder.
+* In the ".env" file, enter "API_KEY=" followed by the API key obtained from [ExchangeRate-API](https://www.exchangerate-api.com/)
 * Install all packages with $ npm install.
 * Build the project using webpack with $ npm run build
 * Start a development server with $ npm run start
